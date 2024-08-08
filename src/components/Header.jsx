@@ -10,9 +10,16 @@ import { fadeInOutWithOpacity, slideUpDownMenu } from "../animation";
 import { auth } from "../config/firebase.config";
 import { useQueryClient } from "react-query";
 import { adminIds } from "../utils/helpers";
+import useFilters from "../hooks/useFilters";
+import { IoMdCloseCircle } from "react-icons/io";
 
 const Header = () => {
-    const { data, isLoading, isError } = useUser();
+    // user state
+    const { data, isLoading } = useUser();
+
+    // filter state
+    const { data: filterData } = useFilters();
+
     const [isMenu, setIsMenu] = useState(false);
 
     const queryClient = useQueryClient();
@@ -24,20 +31,51 @@ const Header = () => {
         });
     };
 
+    // function to show selected filter in the input field
+    const handleSearchTerm = (e) => {
+        queryClient.setQueryData("globalFilter", {
+            ...queryClient.getQueryData("globalFilter"),
+            searchTerm: e.target.value,
+        });
+    };
+
+    // function to clear filter
+    const clearFilter = () => {
+        queryClient.setQueryData("globalFilter", {
+            ...queryClient.getQueryData("globalFilter"),
+            searchTerm: "",
+        });
+    };
+
     return (
         <header className="w-full flex items-center justify-between px-3 py-2 lg:px-5 border-b border-gray-300 bg-bgPrimary z-50 gap-1 md:gap-12 sticky top-0">
             {/* logo */}
             <Link to={"/"}>
-                <img src={Logo} className="w-8 h-auto object-contain" />
+                <img src={Logo} alt="" className="w-8 h-auto object-contain" />
             </Link>
 
             {/* input */}
             <div className="flex-1 border border-gray-300 px-4 py-1 rounded-md flex items-center justify-between bg-gray-200">
                 <input
+                    onChange={handleSearchTerm}
+                    value={filterData?.searchTerm ? filterData?.searchTerm : ""}
                     type="text"
                     placeholder="Search here..."
                     className="flex-1 h-4 sm:h-8 bg-transparent text-xs sm:text-base font-semibold outline-none border-none"
                 />
+
+                {/* Clear Input Search Button */}
+                <AnimatePresence>
+                    {filterData?.searchTerm.length > 0 && (
+                        <motion.div
+                            {...fadeInOutWithOpacity}
+                            onClick={clearFilter}
+                            className="w-8 h-8 flex items-center justify-center cursor-pointer active:scale-90 duration-150"
+                        >
+                            <IoMdCloseCircle className="text-2xl" />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
 
             {/* profile section */}
@@ -54,6 +92,7 @@ const Header = () => {
                             >
                                 {/* profile image */}
                                 {data?.photoURL ? (
+                                    // if user has profile image
                                     <div className="w-10 h-10 relative rounded-md flex items-center justify-center sm:border-2 border-gray-300 cursor-pointer">
                                         <img
                                             src={data?.photoURL}
@@ -63,6 +102,7 @@ const Header = () => {
                                         />
                                     </div>
                                 ) : (
+                                    // if user has no profile image
                                     <div className="w-10 h-10 relative rounded-md flex items-center justify-center border-2 border-gray-300 bg-blue-700 shadow-md cursor-pointer">
                                         <p className="text-md text-white">
                                             {data?.email[0].toUpperCase()}
@@ -109,7 +149,7 @@ const Header = () => {
                                             <div className="w-full flex flex-col items-start gap-4 pt-2 text-xs">
                                                 <Link
                                                     className="text-txtLight whitespace-nowrap hover:text-txtDark"
-                                                    to={"/profile"}
+                                                    to={`/profile/${data?.uid}`}
                                                 >
                                                     My Account
                                                 </Link>
@@ -140,6 +180,7 @@ const Header = () => {
                                 </AnimatePresence>
                             </motion.div>
                         ) : (
+                            // if user is not logged in
                             <Link to={"/auth"}>
                                 <motion.button
                                     className="px-4 py-1 rounded-md border border-gray-300 bg-gray-300 hover:shadow-md active:scale-90 duration-150"

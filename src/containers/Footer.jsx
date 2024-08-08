@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="w-full flex item-center justify-between border-t border-gray-300">
             {/* left side logo */}
             <div className="flex items-center justify-center gap-3 py-3">
-                <img src={Logo} className="w-8 h-auto object-contain" />
+                <img src={Logo} alt="" className="w-8 h-auto object-contain" />
                 <p>Craft My Resume</p>
             </div>
             {/*  */}

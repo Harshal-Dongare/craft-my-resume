@@ -1,4 +1,4 @@
-import { HashLoader, ClockLoader } from "react-spinners";
+import { ClockLoader } from "react-spinners";
 
 const MainSpinner = () => {
     return (

@@ -21,11 +21,13 @@ const HomeScreen = () => {
                 {/* Custom Routes */}
                 <Suspense fallback={<MainSpinner />}>
                     <Routes>
-                        <Route path="/" element={<HomeContainer />} />
+                        {/* Admin Route only */}
                         <Route
                             path="/template/create"
                             element={<CreateTemplate />}
                         />
+
+                        <Route path="/" element={<HomeContainer />} />
                         <Route path="/profile/:uid" element={<UserProfile />} />
                         <Route path="/resume/*" element={<CreateResume />} />
                         <Route

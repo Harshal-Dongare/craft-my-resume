@@ -1,4 +1,4 @@
-import { Logo } from "../assets";
+import { Logo, Logo1 } from "../assets";
 import { Footer } from "../containers";
 import { AuthButtonWithProvider, MainSpinner } from "../components";
 import { FaGithub, FaGoogle } from "react-icons/fa6";
@@ -6,7 +6,7 @@ import useUser from "../hooks/useUser";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 const Authentication = () => {
-    const { data, isLoading, isError } = useUser();
+    const { data, isLoading } = useUser();
 
     const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ const Authentication = () => {
         if (!isLoading && data) {
             navigate("/", { replace: true });
         }
-    }, [isLoading, data]);
+    }, [isLoading, data, navigate]);
 
     if (isLoading) {
         return <MainSpinner />;
@@ -23,10 +23,15 @@ const Authentication = () => {
     return (
         <div className="auth-section">
             {/* Header section of Authentication */}
-            <img src={Logo} className="w-12 h-auto object-contain" />
+            <img src={Logo} alt="" className="w-12 h-auto object-contain" />
 
             {/* Main Section of Authentication */}
             <div className="w-full flex flex-1 flex-col items-center justify-center gap-6">
+                <img
+                    src={Logo1}
+                    alt=""
+                    className="w-40 h-auto object-contain"
+                />
                 <h1 className="text-3xl lg:text-4xl text-blue-700">
                     Welcome to Craft My Resume
                 </h1>
@@ -48,6 +53,11 @@ const Authentication = () => {
                         provider={"GithubAuthProvider"}
                     />
                 </div>
+
+                {/* Footer section of Authentication */}
+                <p className="text-red-600 text-sm font-sans">
+                    After the login, please refresh the page
+                </p>
             </div>
 
             {/* Footer section of Authentication */}

@@ -3,10 +3,9 @@ import {
     GoogleAuthProvider,
     GithubAuthProvider,
     signInWithPopup,
-    linkWithCredential,
-    // signInWithRedirect,
 } from "firebase/auth";
 import { auth } from "../config/firebase.config";
+import { toast } from "react-toastify";
 
 const AuthButtonWithProvider = ({ Icon, label, provider }) => {
     const googleAuthProvider = new GoogleAuthProvider();
@@ -17,18 +16,24 @@ const AuthButtonWithProvider = ({ Icon, label, provider }) => {
         switch (provider) {
             case "GoogleAuthProvider":
                 await signInWithPopup(auth, googleAuthProvider)
+                    // console.log(result);
                     .then((result) => {
-                        console.log(result);
+                        toast.success(
+                            "Successfully Logged In, refresh the page..."
+                        );
                     })
                     .catch((error) => {
-                        console.log(`Error: ${error.message}`);
+                        toast.error(`Error: ${error.message}`);
                     });
                 break;
 
             case "GithubAuthProvider":
                 await signInWithPopup(auth, githubAuthProvider)
                     .then((result) => {
-                        console.log(result);
+                        // console.log(result);
+                        toast.success(
+                            "Successfully Logged In, refresh the page..."
+                        );
                     })
                     .catch((error) => {
                         console.log(`Error: ${error.message}`);
@@ -38,7 +43,10 @@ const AuthButtonWithProvider = ({ Icon, label, provider }) => {
             default:
                 await signInWithPopup(auth, googleAuthProvider)
                     .then((result) => {
-                        console.log(result);
+                        // console.log(result);
+                        toast.success(
+                            "Successfully Logged In, Refresh the page..."
+                        );
                     })
                     .catch((error) => {
                         console.log(`Error: ${error.message}`);
